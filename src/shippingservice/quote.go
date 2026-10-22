@@ -35,7 +35,7 @@ func CreateQuoteFromCount(count int) Quote {
 	if count == 0 {
 		return CreateQuoteFromFloat(0)
 	}
-	return CreateQuoteFromFloat(8.99)
+	return CreateQuoteFromFloat(4.99) // express shipping: flat $4.99
 }
 
 // CreateQuoteFromFloat takes a price represented as a float and creates a Price struct.

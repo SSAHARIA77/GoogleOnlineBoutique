@@ -21,7 +21,7 @@ import (
 
 // CreateTrackingId generates a tracking ID.
 func CreateTrackingId(salt string) string {
-	return fmt.Sprintf("%c%c-%d%s-%d%s",
+	return fmt.Sprintf("EXP-%c%c-%d%s-%d%s", // express tracking IDs
 		getRandomLetterCode(),
 		getRandomLetterCode(),
 		len(salt),
