@@ -79,6 +79,14 @@ module.exports = function charge (request) {
   const { credit_card_expiration_year: year, credit_card_expiration_month: month } = creditCard;
   if ((currentYear * 12 + currentMonth) > (year * 12 + month)) { throw new ExpiredCreditCard(cardNumber.replace('-', ''), month, year); }
 
+  // fix/payment-validation: large orders must go through manual fraud review.
+  const FRAUD_REVIEW_LIMIT = 500;
+  if (amount.units > FRAUD_REVIEW_LIMIT) {
+    logger.warn(`Fraud check: declined ${amount.currency_code} ${amount.units} (limit ${FRAUD_REVIEW_LIMIT})`);
+    throw new CreditCardError(`Payment declined: orders above ${FRAUD_REVIEW_LIMIT} ${amount.currency_code} require manual fraud review.`);
+  }
+  logger.info(`Fraud check passed for ${amount.currency_code} ${amount.units}`);
+
   logger.info(`Transaction processed: ${cardType} ending ${cardNumber.substr(-4)} \
     Amount: ${amount.currency_code}${amount.units}.${amount.nanos}`);
 
