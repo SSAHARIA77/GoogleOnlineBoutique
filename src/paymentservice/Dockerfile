@@ -28,6 +28,10 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
+# BranchBox fork: node-gyp downloads Node headers while compiling native
+# modules; the default 250ms per-address connect timeout fails on
+# high-latency networks. Build-time only, no runtime effect.
+ENV NODE_OPTIONS=--network-family-autoselection-attempt-timeout=5000
 RUN npm install --only=production
 
 FROM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
